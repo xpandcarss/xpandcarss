@@ -62,7 +62,15 @@
             background: var(--gradient-main); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             display: flex; align-items: center; gap: 10px;
         }
-        .brand-logo i { font-size: 1.4rem; color: var(--neon-blue); }
+        
+        /* Estilo para el logo en el header */
+        .header-logo-img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.5); /* Le da un toque neón sutil */
+        }
 
         /* --- BOTONES TECH --- */
         .btn-tech {
@@ -185,7 +193,7 @@
 
     <header>
         <div class="brand-logo">
-            <i class="fas fa-car-side"></i> XPANDCARSS
+            <img src="logo.jpg" alt="Logo XPANDCARSS" class="header-logo-img"> XPANDCARSS
         </div>
         <a href="https://wa.me/50369697787" class="btn-tech">
             <i class="fab fa-whatsapp"></i> Contacto
@@ -214,10 +222,10 @@
                 </div>
                 
                 <div class="car-specs">
-                    <div class="spec-item"><i class="fas fa-cogs"></i> Manual</div>
+                    <div class="spec-item"><i class="fas fa-cogs"></i> Automático</div>
                     <div class="spec-item"><i class="fas fa-snowflake"></i> A/C Full</div>
-                    <div class="spec-item"><i class="fas fa-users"></i> 5 Pasajeros</div>
-                    <div class="spec-item"><i class="fas fa-gas-pump"></i> Económico</div>
+                    <div class="spec-item"><i class="fas fa-users"></i> 4 Pasajeros</div>
+                    <div class="spec-item"><i class="fas fa-gas-pump"></i> Gasolina</div>
                 </div>
                  
                 <p style="color: #ccc; margin-bottom: 25px; font-size: 0.95rem;">Compacto, ágil y súper eficiente. Perfecto para moverte por la ciudad con total libertad y economía.</p>
@@ -241,8 +249,8 @@
                 <div class="car-specs">
                     <div class="spec-item"><i class="fas fa-cogs"></i> Automático</div>
                     <div class="spec-item"><i class="fas fa-snowflake"></i> A/C Full</div>
-                    <div class="spec-item"><i class="fas fa-users"></i> 5 Pasajeros</div>
-                    <div class="spec-item"><i class="fas fa-road"></i> Confortable</div>
+                    <div class="spec-item"><i class="fas fa-users"></i> 4 Pasajeros</div>
+                    <div class="spec-item"><i class="fas fa-gas-pump"></i> Gasolina</div>
                 </div>
 
                 <p style="color: #ccc; margin-bottom: 25px; font-size: 0.95rem;">Comodidad y eficiencia en un solo paquete. Ideal para viajes largos o el tráfico diario con su manejo suave.</p>
