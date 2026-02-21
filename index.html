@@ -12,11 +12,10 @@
     
     <style>
         :root {
-            /* Nueva Paleta de Colores: Cyber Tech Blue/Purple */
             --neon-blue: #00f2fe;
             --neon-purple: #4facfe;
-            --dark-bg: #050505; /* Fondo más oscuro y profundo */
-            --card-bg: rgba(20, 20, 35, 0.6); /* Vidrio oscuro tech */
+            --dark-bg: #050505; 
+            --card-bg: rgba(20, 20, 35, 0.6); 
             --text-light: #ffffff;
             --text-gray: #b3b3b3;
             --gradient-main: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
@@ -24,9 +23,12 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
+        
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--dark-bg);
+            /* REPARACIÓN SCROLL 1: Evita el parpadeo en móviles */
+            background-attachment: fixed;
             color: var(--text-light);
             overflow-x: hidden;
         }
@@ -37,7 +39,6 @@
             background: radial-gradient(ellipse at bottom, #0d1d31 0%, #0c0d13 100%);
             overflow: hidden;
         }
-        /* Red geométrica sutil */
         .grid-lines {
             position: absolute; width: 200%; height: 200%;
             background-image: 
@@ -45,6 +46,8 @@
                 linear-gradient(90deg, rgba(0, 242, 254, 0.1) 1px, transparent 1px);
             background-size: 50px 50px;
             transform: perspective(500px) rotateX(60deg);
+            /* REPARACIÓN SCROLL 2: Aceleración por hardware para fluidez */
+            will-change: transform;
             animation: gridMove 20s linear infinite;
             top: -50%; left: -50%; opacity: 0.3;
         }
@@ -55,21 +58,20 @@
             display: flex; justify-content: space-between; align-items: center;
             padding: 15px 5%; position: sticky; top: 0; z-index: 1000;
             background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(20px);
+            /* Safari support para el blur */
+            -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(0, 242, 254, 0.1);
         }
+        
         .brand-logo {
             font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.8rem; letter-spacing: 1px;
             background: var(--gradient-main); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             display: flex; align-items: center; gap: 10px;
         }
         
-        /* Estilo para el logo en el header */
         .header-logo-img {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            object-fit: cover;
-            box-shadow: 0 0 10px rgba(0, 242, 254, 0.5); /* Le da un toque neón sutil */
+            width: 35px; height: 35px; border-radius: 50%; object-fit: cover;
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.5); 
         }
 
         /* --- BOTONES TECH --- */
@@ -77,7 +79,7 @@
             padding: 12px 30px; border: 2px solid transparent; border-radius: 50px;
             background: linear-gradient(var(--dark-bg), var(--dark-bg)) padding-box, var(--gradient-main) border-box;
             color: var(--text-light); font-weight: 700; text-transform: uppercase; font-size: 0.9rem;
-            transition: 0.4s; position: relative; overflow: hidden; text-decoration: none; display: inline-block;
+            transition: 0.4s; position: relative; overflow: hidden; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
         }
         .btn-tech:hover {
             background: var(--gradient-main) padding-box, var(--gradient-main) border-box;
@@ -85,6 +87,9 @@
         }
         .btn-tech.fill { background: var(--gradient-main); border: none; }
         .btn-tech.fill:hover { box-shadow: 0 0 30px rgba(79, 172, 254, 0.7); }
+
+        /* Icono dentro del botón (para ocultar texto en móvil luego) */
+        .btn-text { margin-left: 8px; }
 
         /* --- HERO SECTION --- */
         .hero {
@@ -109,12 +114,11 @@
         .car-card {
             background: var(--card-bg); border-radius: 25px; overflow: hidden;
             border: 1px solid rgba(0, 242, 254, 0.2);
-            backdrop-filter: blur(15px); margin-bottom: 50px;
-            display: flex; flex-direction: row; /* Diseño horizontal en PC */
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            margin-bottom: 50px;
+            display: flex; flex-direction: row; 
             transition: 0.4s;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            
-            /* Animación de entrada */
             opacity: 0; transform: translateY(30px);
             animation: fadeUp 0.8s forwards;
         }
@@ -173,15 +177,44 @@
         /* --- RESPONSIVE --- */
         @media (max-width: 992px) {
             .hero h1 { font-size: 3.5rem; }
-            .car-card { flex-direction: column; } /* Tarjetas verticales en móvil/tablet */
+            
+            /* REPARACIÓN CARRO 2 DISTORSIONADO: Forzamos que SIEMPRE sea columna en móvil */
+            .car-card, .car-card[style*="row-reverse"] { 
+                flex-direction: column !important; 
+            } 
+            
             .car-image-container { min-height: 250px; }
-            .car-details { border-left: none; border-top: 1px solid rgba(0, 242, 254, 0.1); padding: 30px; text-align: center; }
+            
+            /* Arreglo de bordes para que no se vean raros en móvil */
+            .car-details, .car-details[style*="border-left: none"] { 
+                border-left: none !important; 
+                border-right: none !important;
+                border-top: 1px solid rgba(0, 242, 254, 0.1) !important; 
+                padding: 30px; 
+                text-align: center; 
+            }
             .car-specs { justify-content: center; }
         }
+
         @media (max-width: 480px) {
+            /* REPARACIÓN BOTÓN CORTADO: Solo dejamos el icono de WhatsApp, quitamos la palabra "Contacto" */
+            .nav-btn-text { display: none; }
+            .btn-tech.header-btn { 
+                padding: 10px; 
+                width: 45px; 
+                height: 45px; 
+                border-radius: 50%; /* Lo hace redondo perfecto */
+            }
+            .btn-tech.header-btn i {
+                font-size: 1.2rem;
+                margin: 0; /* Quita márgenes del icono */
+            }
+
+            .brand-logo { font-size: 1.3rem; } /* Achica un poco el logo para dar espacio */
+            
             .hero h1 { font-size: 2.8rem; }
             .section-title { font-size: 2.2rem; }
-            .btn-tech { width: 100%; text-align: center; }
+            .btn-tech { width: 100%; text-align: center; justify-content: center; }
         }
     </style>
 </head>
@@ -195,8 +228,8 @@
         <div class="brand-logo">
             <img src="logo.jpg" alt="Logo XPANDCARSS" class="header-logo-img"> XPANDCARSS
         </div>
-        <a href="https://wa.me/50369697787" class="btn-tech">
-            <i class="fab fa-whatsapp"></i> Contacto
+        <a href="https://wa.me/50369697787" class="btn-tech header-btn">
+            <i class="fab fa-whatsapp"></i> <span class="nav-btn-text btn-text">Contacto</span>
         </a>
     </header>
 
@@ -230,8 +263,8 @@
                  
                 <p style="color: #ccc; margin-bottom: 25px; font-size: 0.95rem;">Compacto, ágil y súper eficiente. Perfecto para moverte por la ciudad con total libertad y economía.</p>
                 
-                <a href="https://wa.me/50369697787?text=Hola%20XPANDCARSS,%20estoy%20interesado%20en%20rentar%20el%20CHEVROLET%20SPARK%20LT%202017." class="btn-tech fill" style="width: 100%; text-align: center;">
-                    <i class="far fa-calendar-check" style="margin-right: 8px;"></i> RESERVAR AHORA
+                <a href="https://wa.me/50369697787?text=Hola%20XPANDCARSS,%20estoy%20interesado%20en%20rentar%20el%20CHEVROLET%20SPARK%20LT%202017." class="btn-tech fill">
+                    <i class="far fa-calendar-check"></i> <span class="btn-text">RESERVAR AHORA</span>
                 </a>
             </div>
         </div>
@@ -255,8 +288,8 @@
 
                 <p style="color: #ccc; margin-bottom: 25px; font-size: 0.95rem;">Comodidad y eficiencia en un solo paquete. Ideal para viajes largos o el tráfico diario con su manejo suave.</p>
 
-                 <a href="https://wa.me/50369697787?text=Hola%20XPANDCARSS,%20estoy%20interesado%20en%20rentar%20el%20MITSUBISHI%20MIRAGE%202014." class="btn-tech fill" style="width: 100%; text-align: center;">
-                    <i class="far fa-calendar-check" style="margin-right: 8px;"></i> RESERVAR AHORA
+                 <a href="https://wa.me/50369697787?text=Hola%20XPANDCARSS,%20estoy%20interesado%20en%20rentar%20el%20MITSUBISHI%20MIRAGE%202014." class="btn-tech fill">
+                    <i class="far fa-calendar-check"></i> <span class="btn-text">RESERVAR AHORA</span>
                 </a>
             </div>
         </div>
