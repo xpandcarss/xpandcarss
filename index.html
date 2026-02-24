@@ -30,7 +30,6 @@
             color: var(--text-light);
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            /* Evita rebotes raros al hacer scroll en Android */
             overscroll-behavior-y: none; 
         }
 
@@ -60,8 +59,6 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(0, 242, 254, 0.1);
-            
-            /* ACELERACIÓN POR HARDWARE: Evita que el rectángulo parpadee */
             transform: translate3d(0, 0, 0);
             backface-visibility: hidden;
             will-change: transform;
@@ -109,7 +106,7 @@
         /* --- SECCIÓN DE FLOTA (CARROS) --- */
         .fleet-section { 
             padding: 80px 5%; position: relative; z-index: 10; 
-            contain: paint; /* Aísla esta sección para que no afecte el renderizado global */
+            /* Se removió 'contain: paint' para evitar tirones en móvil */
         }
         .section-title {
             text-align: center; font-size: 3rem; font-family: 'Montserrat', sans-serif; font-weight: 900;
@@ -118,7 +115,9 @@
         .title-accent { color: var(--neon-blue); }
 
         .car-card {
-            background: var(--card-bg); border-radius: 25px; overflow: hidden;
+            background: var(--card-bg); 
+            border-radius: 25px; 
+            overflow: hidden;
             border: 1px solid rgba(0, 242, 254, 0.2);
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             max-width: 1000px; 
@@ -127,11 +126,9 @@
             transition: 0.4s;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             
-            /* Animación 3D para evitar repintado */
             opacity: 0; transform: translate3d(0, 30px, 0);
             animation: fadeUp 0.8s forwards;
             
-            /* Fuerza a la tarjeta a ser una capa de hardware separada */
             will-change: transform, opacity;
             backface-visibility: hidden;
         }
@@ -147,12 +144,11 @@
 
         .car-image-container {
             flex: 1.2; min-height: 350px; position: relative; overflow: hidden;
-            transform: translate3d(0,0,0); /* Evita glitch en bordes de la imagen */
+            /* Se evita usar transform aquí para no recargar la tarjeta */
         }
         .car-img {
             width: 100%; height: 100%; object-fit: cover;
             display: block; 
-            transform: translate3d(0,0,0);
         }
 
         .car-details {
@@ -189,46 +185,47 @@
         .social-icons a:hover { background: var(--gradient-main); transform: translateY(-5px); box-shadow: 0 0 20px rgba(0, 242, 254, 0.4); }
         .copyright { color: #666; font-size: 0.9rem; }
 
-        /* --- RESPONSIVE PARA MÓVIL (LA CURA DEFINITIVA) --- */
+        /* --- RESPONSIVE PARA MÓVIL (LA CURA DEFINITIVA Y SIN LAG) --- */
         @media (max-width: 992px) {
             
-            /* FONDO MÓVIL SÚPER LIGERO */
             .grid-lines { display: none !important; }
             .tech-background {
-                background: #080b12 !important; /* Color sólido, sin gradientes radiales pesados */
+                background: #080b12 !important; 
                 background-image: 
                     linear-gradient(rgba(0, 242, 254, 0.05) 1px, transparent 1px),
                     linear-gradient(90deg, rgba(0, 242, 254, 0.05) 1px, transparent 1px) !important;
                 background-size: 40px 40px !important;
             }
 
-            /* HEADER MÓVIL: Eliminamos filtros, usamos sólido y forzamos renderizado */
             header {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
                 background: #050505 !important; 
                 border-bottom: 1px solid rgba(0, 242, 254, 0.3) !important;
-                /* Doble protección anti-parpadeo */
                 transform: translate3d(0, 0, 0) !important;
                 -webkit-transform: translate3d(0, 0, 0) !important;
             }
 
             .hero h1 { font-size: 3.5rem; }
             
-            /* TARJETAS MÓVIL: Adiós sombras y transparencias complejas */
             .car-card, .car-card[style*="row-reverse"] { 
                 flex-direction: column !important; 
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
-                background: #11151c !important; /* Color HEX sólido puro */
-                
-                /* LA SOLUCIÓN A LOS CUADROS LATERALES: Quitamos la sombra en celular */
+                background: #11151c !important; 
                 box-shadow: none !important; 
-                
                 border: 1px solid rgba(0, 242, 254, 0.15) !important;
-                transform: translate3d(0, 0, 0) !important;
-                -webkit-transform: translate3d(0, 0, 0) !important;
+                
+                /* ANIMACIÓN SIMPLIFICADA PARA EVITAR LAG: Solo opacidad, sin movimiento */
+                transform: none !important;
+                animation: mobileFadeIn 0.5s ease-in forwards !important;
             } 
+            
+            /* Animación ligera para móvil */
+            @keyframes mobileFadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
             
             .car-image-container { min-height: 250px; }
             
