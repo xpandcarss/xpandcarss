@@ -14,14 +14,22 @@
         :root {
             --neon-blue: #00f2fe;
             --neon-purple: #4facfe;
+            --dark-bg: #050505; 
+            --card-bg: #11151c; /* Un tono sutilmente más claro que el fondo para que resalte */
             --gradient-main: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #050505; /* Fondo aplicado directo al body, sin capas extra */
+            background-color: var(--dark-bg);
+            /* TRUCO: Un patrón de cuadrícula súper ligero que se mueve con el scroll (cero lag) */
+            background-image: 
+                linear-gradient(rgba(0, 242, 254, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 254, 0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
             color: #ffffff;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
@@ -31,138 +39,236 @@
         header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 15px 5%; position: sticky; top: 0; z-index: 1000;
-            background: #050505; 
-            border-bottom: 1px solid #1a1a1a;
+            background: rgba(5, 5, 5, 0.95); /* Casi sólido, da ilusión de cristal sin el lag del blur */
+            border-bottom: 1px solid rgba(0, 242, 254, 0.2);
         }
         
         .brand-logo {
-            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.8rem;
+            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.5rem;
             background: var(--gradient-main); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             display: flex; align-items: center; gap: 10px;
         }
         
-        .header-logo-img { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; }
+        .header-logo-img { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 1px solid var(--neon-blue); }
 
         /* --- BOTONES --- */
         .btn-tech {
             padding: 12px 25px; border-radius: 50px;
             background: var(--gradient-main);
             color: #000; font-weight: 700; text-transform: uppercase; font-size: 0.85rem;
-            text-decoration: none; display: inline-flex; align-items: center;
+            text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3); /* Sombra estática ligera */
         }
 
         /* --- HERO --- */
         .hero {
-            min-height: 70vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
             text-align: center; padding: 0 20px;
         }
-        .hero h1 { font-family: 'Montserrat', sans-serif; font-size: 3.5rem; font-weight: 900; text-transform: uppercase; }
+        .hero h1 { font-family: 'Montserrat', sans-serif; font-size: 3.5rem; font-weight: 900; text-transform: uppercase; line-height: 1.1; margin-bottom: 15px;}
         .hero h1 span { background: var(--gradient-main); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero p { font-size: 1.1rem; color: #b3b3b3; margin: 20px 0; max-width: 500px; }
+        .hero p { font-size: 1.1rem; color: #b3b3b3; margin-bottom: 30px; max-width: 500px; }
         
-        /* --- FLOTA --- */
-        .fleet-section { padding: 40px 5%; }
-        .section-title { text-align: center; font-size: 2.5rem; font-family: 'Montserrat', sans-serif; margin-bottom: 40px; }
+        /* --- TITULOS DE SECCIÓN --- */
+        .section-title { 
+            text-align: center; font-size: 2.5rem; font-family: 'Montserrat', sans-serif; 
+            margin-bottom: 50px; font-weight: 900; text-transform: uppercase;
+        }
+        .section-title span { color: var(--neon-blue); }
 
+        /* --- SECCIÓN: CÓMO FUNCIONA --- */
+        .steps-section { padding: 60px 5%; background: linear-gradient(to bottom, transparent, #0a0c10, transparent); }
+        .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; max-width: 1100px; margin: 0 auto; }
+        .step-card {
+            text-align: center; padding: 30px 20px;
+            background: rgba(17, 21, 28, 0.8); border: 1px solid rgba(255,255,255,0.05); border-radius: 15px;
+        }
+        .step-icon {
+            width: 70px; height: 70px; background: rgba(0, 242, 254, 0.1); color: var(--neon-blue);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem;
+            margin: 0 auto 20px auto; border: 1px solid rgba(0, 242, 254, 0.3);
+        }
+        .step-card h3 { font-size: 1.2rem; margin-bottom: 10px; font-family: 'Montserrat', sans-serif; }
+        .step-card p { color: #888; font-size: 0.9rem; }
+
+        /* --- SECCIÓN: FLOTA --- */
+        .fleet-section { padding: 80px 5%; }
+
+        /* TARJETAS RECUPERADAS (Sin lag, pero con estilo) */
         .car-card {
-            background: #0f1219; 
+            background: var(--card-bg); 
             border-radius: 20px; 
-            /* SIN OVERFLOW: HIDDEN (esto causaba el lag al pasar por las tarjetas) */
-            border: 1px solid #1a1a1a;
-            max-width: 1000px; margin: 0 auto 30px auto; 
+            border: 1px solid rgba(0, 242, 254, 0.2); /* Borde neón sutil */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8); /* Sombra oscura para dar profundidad y separar del fondo */
+            max-width: 1000px; margin: 0 auto 40px auto; 
             display: flex; flex-direction: row;
         }
 
-        .car-image-container { flex: 1.2; min-height: 300px; }
+        .car-image-container { flex: 1.2; min-height: 300px; position: relative; }
         
         .car-img { 
             width: 100%; height: 100%; object-fit: cover; display: block; 
-            /* Redondeamos la imagen directamente en PC */
             border-top-left-radius: 19px; border-bottom-left-radius: 19px;
         }
-
-        .car-details { flex: 1; padding: 30px; display: flex; flex-direction: column; justify-content: center; }
-        .car-title { font-size: 2rem; font-family: 'Montserrat', sans-serif; margin-bottom: 5px; color: var(--neon-blue); }
-        .car-year { font-size: 1rem; color: #b3b3b3; margin-bottom: 15px; display: block; }
         
-        .car-specs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-        .spec-item {
-            font-size: 0.8rem; color: #eee; background: #1e222a; padding: 6px 12px; border-radius: 5px;
+        /* Pequeña etiqueta de precio/estado encima de la imagen */
+        .car-badge {
+            position: absolute; top: 15px; left: 15px; background: var(--gradient-main);
+            color: #000; font-weight: 700; font-size: 0.8rem; padding: 5px 12px; border-radius: 50px;
         }
 
-        /* --- MÓVIL (MAX SPEED) --- */
+        .car-details { flex: 1; padding: 35px; display: flex; flex-direction: column; justify-content: center; }
+        .car-title { font-size: 2rem; font-family: 'Montserrat', sans-serif; margin-bottom: 5px; color: #fff; }
+        .car-year { font-size: 1rem; color: var(--neon-purple); margin-bottom: 15px; font-weight: 600; }
+        
+        .car-specs { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+        .spec-item {
+            font-size: 0.85rem; color: #ccc; background: rgba(255,255,255,0.05); 
+            padding: 8px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* --- SECCIÓN: POR QUÉ ELEGIRNOS --- */
+        .benefits-section { padding: 60px 5%; text-align: center; }
+        .benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; max-width: 1000px; margin: 0 auto; }
+        .benefit-item i { font-size: 2.5rem; color: var(--neon-purple); margin-bottom: 15px; }
+        .benefit-item h4 { font-family: 'Montserrat', sans-serif; margin-bottom: 8px; }
+        .benefit-item p { font-size: 0.9rem; color: #777; }
+
+        /* --- MÓVIL --- */
         @media (max-width: 992px) {
             .hero h1 { font-size: 2.8rem; }
-            .car-card { flex-direction: column !important; background: #0a0a0a !important; }
-            .car-image-container { min-height: 220px; }
+            .car-card { flex-direction: column !important; }
+            .car-image-container { min-height: 250px; }
             
-            /* Ajustamos los bordes de la imagen para la vista en columna móvil */
             .car-img {
                 border-top-left-radius: 19px;
                 border-top-right-radius: 19px;
                 border-bottom-left-radius: 0;
             }
 
-            .car-details { padding: 20px; text-align: center; }
+            .car-details { padding: 25px; text-align: center; }
             .car-specs { justify-content: center; }
         }
 
-        footer { background: #000; padding: 40px; text-align: center; border-top: 1px solid #111; }
+        footer { background: #020202; padding: 50px 20px; text-align: center; border-top: 1px solid #111; margin-top: 40px;}
+        .footer-logo { font-family: 'Montserrat', sans-serif; font-size: 1.5rem; font-weight: 900; margin-bottom: 10px; color: #fff;}
     </style>
 </head>
 <body>
 
     <header>
-        <div class="brand-logo">XPANDCARSS</div>
+        <div class="brand-logo">
+            <img src="logo.jpg" alt="Logo" class="header-logo-img"> XPANDCARSS
+        </div>
         <a href="https://wa.me/50369697787" class="btn-tech">
-            <i class="fab fa-whatsapp"></i>
+            <i class="fab fa-whatsapp"></i>&nbsp; CONTACTO
         </a>
     </header>
 
     <section class="hero">
         <h1>EXPANDE TUS <br> <span>HORIZONTES</span></h1>
-        <p>Renta de autos moderna y segura en El Salvador. 🇸🇻</p>
-        <a href="#flota" class="btn-tech" style="padding: 15px 30px;">VER FLOTA</a>
+        <p>Tu viaje comienza aquí. Renta de autos moderna, fácil y segura en El Salvador. Sin complicaciones. 🇸🇻</p>
+        <a href="#flota" class="btn-tech" style="padding: 15px 35px; font-size: 1rem;">VER FLOTA DISPONIBLE</a>
+    </section>
+
+    <section class="steps-section">
+        <h2 class="section-title">Rentarlo es <span>Fácil</span></h2>
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-icon"><i class="fas fa-car"></i></div>
+                <h3>1. Elige tu Auto</h3>
+                <p>Explora nuestra flota y selecciona el vehículo que mejor se adapte a tus necesidades.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-icon"><i class="fab fa-whatsapp"></i></div>
+                <h3>2. Contáctanos</h3>
+                <p>Escríbenos directamente por WhatsApp para confirmar fechas y disponibilidad.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-icon"><i class="fas fa-key"></i></div>
+                <h3>3. Toma las Llaves</h3>
+                <p>Firma el contrato rápido, recibe las llaves y comienza a disfrutar tu viaje.</p>
+            </div>
+        </div>
     </section>
 
     <section id="flota" class="fleet-section">
-        <h2 class="section-title">Nuestra Flota</h2>
+        <h2 class="section-title">Nuestra <span>Flota</span></h2>
 
         <div class="car-card">
             <div class="car-image-container">
+                <div class="car-badge">Disponible</div>
                 <img src="spark.jpg" alt="Chevrolet Spark" class="car-img">
             </div>
             <div class="car-details">
                 <h3 class="car-title">CHEVROLET SPARK</h3>
                 <span class="car-year">Edición 2017</span>
                 <div class="car-specs">
-                    <div class="spec-item">Automático</div>
-                    <div class="spec-item">A/C Full</div>
-                    <div class="spec-item">4 Pasajeros</div>
+                    <div class="spec-item"><i class="fas fa-cogs"></i> Automático</div>
+                    <div class="spec-item"><i class="fas fa-snowflake"></i> A/C Full</div>
+                    <div class="spec-item"><i class="fas fa-users"></i> 4 Pasajeros</div>
                 </div>
-                <a href="https://wa.me/50369697787" class="btn-tech" style="justify-content: center;">RESERVAR</a>
+                <p style="color: #888; margin-bottom: 20px; font-size: 0.9rem;">Compacto, ágil y súper eficiente. Perfecto para moverte por la ciudad con total economía.</p>
+                <a href="https://wa.me/50369697787" class="btn-tech">
+                    <i class="far fa-calendar-check"></i>&nbsp; RESERVAR AHORA
+                </a>
             </div>
         </div>
 
-        <div class="car-card">
+        <div class="car-card" style="flex-direction: row-reverse;">
             <div class="car-image-container">
+                <div class="car-badge">Disponible</div>
                 <img src="mirage.jpg" alt="Mitsubishi Mirage" class="car-img">
+                <style>
+                    /* Ajuste de bordes específicos para la tarjeta invertida en PC */
+                    @media (min-width: 993px) {
+                        .car-card[style*="row-reverse"] .car-img {
+                            border-radius: 0 19px 19px 0;
+                        }
+                    }
+                </style>
             </div>
             <div class="car-details">
                 <h3 class="car-title">MITSUBISHI MIRAGE</h3>
                 <span class="car-year">Edición 2014</span>
                 <div class="car-specs">
-                    <div class="spec-item">Automático</div>
-                    <div class="spec-item">A/C Full</div>
-                    <div class="spec-item">4 Pasajeros</div>
+                    <div class="spec-item"><i class="fas fa-cogs"></i> Automático</div>
+                    <div class="spec-item"><i class="fas fa-snowflake"></i> A/C Full</div>
+                    <div class="spec-item"><i class="fas fa-users"></i> 4 Pasajeros</div>
                 </div>
-                <a href="https://wa.me/50369697787" class="btn-tech" style="justify-content: center;">RESERVAR</a>
+                <p style="color: #888; margin-bottom: 20px; font-size: 0.9rem;">Comodidad y eficiencia en un solo paquete. Ideal para el tráfico diario con su manejo suave.</p>
+                <a href="https://wa.me/50369697787" class="btn-tech">
+                    <i class="far fa-calendar-check"></i>&nbsp; RESERVAR AHORA
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="benefits-section">
+        <h2 class="section-title" style="font-size: 2rem;">¿Por qué elegirnos?</h2>
+        <div class="benefits-grid">
+            <div class="benefit-item">
+                <i class="fas fa-shield-alt"></i>
+                <h4>Seguridad</h4>
+                <p>Vehículos en óptimas condiciones.</p>
+            </div>
+            <div class="benefit-item">
+                <i class="fas fa-headset"></i>
+                <h4>Soporte</h4>
+                <p>Asistencia rápida ante cualquier duda.</p>
+            </div>
+            <div class="benefit-item">
+                <i class="fas fa-tags"></i>
+                <h4>Sin Sorpresas</h4>
+                <p>Precios claros y transparentes.</p>
             </div>
         </div>
     </section>
 
     <footer>
-        <p style="color: #444;">&copy; 2026 XPANDCARSS</p>
+        <div class="footer-logo">XPANDCARSS</div>
+        <p style="color: #666; font-size: 0.9rem; margin-bottom: 20px;">Innovación en movimiento.</p>
+        <p style="color: #444; font-size: 0.8rem;">&copy; 2026 XPANDCARSS. El Salvador.</p>
     </footer>
 
 </body>
