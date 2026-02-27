@@ -15,7 +15,7 @@
             --neon-blue: #00f2fe;
             --neon-purple: #4facfe;
             --dark-bg: #050505; 
-            --card-bg: #11151c; /* Un tono sutilmente más claro que el fondo para que resalte */
+            --card-bg: #11151c;
             --gradient-main: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
         }
 
@@ -25,7 +25,6 @@
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--dark-bg);
-            /* TRUCO: Un patrón de cuadrícula súper ligero que se mueve con el scroll (cero lag) */
             background-image: 
                 linear-gradient(rgba(0, 242, 254, 0.04) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 242, 254, 0.04) 1px, transparent 1px);
@@ -35,16 +34,18 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- HEADER --- */
+        /* --- HEADER CON EFECTO VIDRIO --- */
         header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 15px 5%; position: sticky; top: 0; z-index: 1000;
-            background: rgba(5, 5, 5, 0.95); /* Casi sólido, da ilusión de cristal sin el lag del blur */
+            background: rgba(5, 5, 5, 0.6); /* Más transparente para el efecto vidrio */
+            backdrop-filter: blur(15px); /* Efecto vidrio esmerilado */
+            -webkit-backdrop-filter: blur(15px); /* Soporte para iPhone/Safari */
             border-bottom: 1px solid rgba(0, 242, 254, 0.2);
         }
         
         .brand-logo {
-            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.5rem;
+            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.8rem;
             background: var(--gradient-main); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             display: flex; align-items: center; gap: 10px;
         }
@@ -57,7 +58,7 @@
             background: var(--gradient-main);
             color: #000; font-weight: 700; text-transform: uppercase; font-size: 0.85rem;
             text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3); /* Sombra estática ligera */
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
         }
 
         /* --- HERO --- */
@@ -94,12 +95,11 @@
         /* --- SECCIÓN: FLOTA --- */
         .fleet-section { padding: 80px 5%; }
 
-        /* TARJETAS RECUPERADAS (Sin lag, pero con estilo) */
         .car-card {
             background: var(--card-bg); 
             border-radius: 20px; 
-            border: 1px solid rgba(0, 242, 254, 0.2); /* Borde neón sutil */
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8); /* Sombra oscura para dar profundidad y separar del fondo */
+            border: 1px solid rgba(0, 242, 254, 0.2); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8); 
             max-width: 1000px; margin: 0 auto 40px auto; 
             display: flex; flex-direction: row;
         }
@@ -111,7 +111,6 @@
             border-top-left-radius: 19px; border-bottom-left-radius: 19px;
         }
         
-        /* Pequeña etiqueta de precio/estado encima de la imagen */
         .car-badge {
             position: absolute; top: 15px; left: 15px; background: var(--gradient-main);
             color: #000; font-weight: 700; font-size: 0.8rem; padding: 5px 12px; border-radius: 50px;
@@ -134,7 +133,7 @@
         .benefit-item h4 { font-family: 'Montserrat', sans-serif; margin-bottom: 8px; }
         .benefit-item p { font-size: 0.9rem; color: #777; }
 
-        /* --- MÓVIL --- */
+        /* --- MÓVIL / TABLET --- */
         @media (max-width: 992px) {
             .hero h1 { font-size: 2.8rem; }
             .car-card { flex-direction: column !important; }
@@ -150,6 +149,24 @@
             .car-specs { justify-content: center; }
         }
 
+        /* --- CELULARES PEQUEÑOS (ARREGLO DEL BOTÓN) --- */
+        @media (max-width: 600px) {
+            /* Ocultamos la palabra "CONTACTO" */
+            .nav-text { display: none; }
+            
+            /* Hacemos el botón perfectamente redondo */
+            .btn-tech.header-btn { 
+                padding: 10px; 
+                width: 45px; 
+                height: 45px; 
+                border-radius: 50%; 
+            }
+            .btn-tech.header-btn i { font-size: 1.3rem; margin: 0; }
+            
+            /* Achicamos un pelín el logo para que respire */
+            .brand-logo { font-size: 1.3rem; }
+        }
+
         footer { background: #020202; padding: 50px 20px; text-align: center; border-top: 1px solid #111; margin-top: 40px;}
         .footer-logo { font-family: 'Montserrat', sans-serif; font-size: 1.5rem; font-weight: 900; margin-bottom: 10px; color: #fff;}
     </style>
@@ -160,8 +177,8 @@
         <div class="brand-logo">
             <img src="logo.jpg" alt="Logo" class="header-logo-img"> XPANDCARSS
         </div>
-        <a href="https://wa.me/50369697787" class="btn-tech">
-            <i class="fab fa-whatsapp"></i>&nbsp; CONTACTO
+        <a href="https://wa.me/50369697787" class="btn-tech header-btn">
+            <i class="fab fa-whatsapp"></i><span class="nav-text">&nbsp; CONTACTO</span>
         </a>
     </header>
 
@@ -220,7 +237,6 @@
                 <div class="car-badge">Disponible</div>
                 <img src="mirage.jpg" alt="Mitsubishi Mirage" class="car-img">
                 <style>
-                    /* Ajuste de bordes específicos para la tarjeta invertida en PC */
                     @media (min-width: 993px) {
                         .car-card[style*="row-reverse"] .car-img {
                             border-radius: 0 19px 19px 0;
